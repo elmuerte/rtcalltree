@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/elmuerte/rtcalltree.svg?branch=master)](https://travis-ci.org/elmuerte/rtcalltree)
+
 rtcalltree
 ==========
 
