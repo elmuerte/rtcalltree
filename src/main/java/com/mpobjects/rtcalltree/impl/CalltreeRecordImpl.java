@@ -32,8 +32,8 @@ public class CalltreeRecordImpl implements CalltreeRecord {
 	/**
 	 * @param aCalltreeReporter
 	 */
-	public void setCalltreeReporter(CalltreeReporter aCalltreeReporter) {
-
+	public void setCalltreeReporter(@Nonnull CalltreeReporter aCalltreeReporter) {
+		calltreeReporter = aCalltreeReporter;
 	}
 
 	@Override
@@ -47,9 +47,10 @@ public class CalltreeRecordImpl implements CalltreeRecord {
 	public void stop(@Nonnull MutableCalltreeEntry aEntry) {
 		if (lastEntry != aEntry) {
 			// TODO: something wrong
+			return;
 		}
-		currentDepth = aEntry.getDepth() - 1;
-		if (currentDepth < 0) {
+		currentDepth = aEntry.getDepth();
+		if (currentDepth == 0) {
 			endOfCallTree();
 		}
 	}

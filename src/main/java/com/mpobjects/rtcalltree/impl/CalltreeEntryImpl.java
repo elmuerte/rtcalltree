@@ -43,6 +43,7 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 	 *
 	 * @see #endRecord(long)
 	 */
+	@Override
 	public void endRecord() {
 		endRecord(System.nanoTime());
 	}
@@ -53,6 +54,7 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 	 *
 	 * @see #endRecord()
 	 */
+	@Override
 	public void endRecord(long aTimestamp) {
 		if (deltaTime > -1) {
 			return;
@@ -109,6 +111,7 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 	 * @param aDepth
 	 *            the depth to set
 	 */
+	@Override
 	public void setDepth(int aDepth) {
 		depth = aDepth;
 	}
@@ -127,6 +130,19 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 
 	public void setSourceLine(int aSourceLine) {
 		sourceLine = aSourceLine;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < depth; ++i) {
+			sb.append('\t');
+		}
+		sb.append("+ [").append(depth).append("]");
+		sb.append("(").append(deltaTime).append("ns) ");
+		sb.append(className).append('.');
+		sb.append(methodName);
+		return sb.toString();
 	}
 
 }

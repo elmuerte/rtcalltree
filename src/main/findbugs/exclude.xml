@@ -5,12 +5,18 @@
 <FindBugsFilter>
 	<Match>
 		<Bug pattern="EI_EXPOSE_REP" />
-		<Method name="getArguments" returns="java.lang.Object[]" params="" />
-		<Class name="com.mpobjects.rtcalltree.impl.CTRecordImpl" />
+		<Or>
+			<Method name="getParameterTypes" returns="java.lang.String[]" params="" />
+			<Method name="getParameterValues" returns="java.lang.Object[]" params="" />
+		</Or>
+		<Class name="com.mpobjects.rtcalltree.impl.CalltreeEntryImpl" />
 	</Match>
 	<Match>
 		<Bug pattern="EI_EXPOSE_REP2" />
-		<Method name="&lt;init&gt;" />
-		<Class name="com.mpobjects.rtcalltree.impl.CTRecordImpl" />
+		<Or>
+			<Method name="setParameterTypes" returns="void"  />
+			<Method name="setParameterValues" returns="void"  />
+		</Or>
+		<Class name="com.mpobjects.rtcalltree.impl.CalltreeEntryImpl" />
 	</Match>
 </FindBugsFilter>

@@ -3,7 +3,6 @@
  */
 package com.mpobjects.rtcalltree.rec;
 
-import java.util.Arrays;
 import java.util.Stack;
 
 import com.mpobjects.rtcalltree.CalltreeRecordManager;
@@ -11,7 +10,29 @@ import com.mpobjects.rtcalltree.MutableCalltreeEntry;
 import com.mpobjects.rtcalltree.impl.CalltreeEntryImpl;
 
 /**
+ * Produces calltree entries based on the current stacktree. This is very easy recorder, but it does come with with a
+ * lot of overhead due to the fact that a stacktrace is created.
+ * <p>
+ * This reportin is only able to record the following attributes:
+ * <ul>
+ * <li>Classname
+ * <li>Method name
+ * <li>Source file (if available)
+ * <li>Source line (if available)
+ * </ul>
+ * <p>
+ * Example usage
  *
+ * <pre>
+ * void myMethod() {
+ * 	StacktraceRecorder.start();
+ * 	try {
+ * 		// Do your work
+ * 	} finally {
+ * 		StacktraceRecorder.stop();
+ * 	}
+ * }
+ * </pre>
  */
 public final class StacktraceRecorder {
 
@@ -62,8 +83,6 @@ public final class StacktraceRecorder {
 	static MutableCalltreeEntry createEntry() {
 		final long startTime = System.nanoTime();
 		StackTraceElement[] elms = Thread.currentThread().getStackTrace();
-		System.err.println(Arrays.toString(elms));
-
 		if (elms.length <= STACK_OFFSET) {
 			return null;
 		}

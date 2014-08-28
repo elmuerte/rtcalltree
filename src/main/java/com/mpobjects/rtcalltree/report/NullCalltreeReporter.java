@@ -19,6 +19,7 @@ public final class NullCalltreeReporter implements CalltreeReporter {
 
 	@Override
 	public void reportEndOfTree(List<MutableCalltreeEntry> aCallTree) {
+		// nop
 	}
 
 }
