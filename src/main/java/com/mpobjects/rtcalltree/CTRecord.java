@@ -5,6 +5,8 @@ package com.mpobjects.rtcalltree;
 
 import java.lang.reflect.Method;
 
+import javax.annotation.CheckForNull;
+
 /**
  * A recorded entry in the call tree
  */
@@ -16,6 +18,7 @@ public interface CTRecord {
 	 *
 	 * @return the method arguments, or null when not recorded
 	 */
+	@CheckForNull
 	Object[] getArguments();
 
 	/**
@@ -31,13 +34,6 @@ public interface CTRecord {
 	 * @return
 	 */
 	int getDepth();
-
-	/**
-	 * The class for which this record was created
-	 *
-	 * @return
-	 */
-	Class<?> getKlass();
 
 	/**
 	 * Method which was called

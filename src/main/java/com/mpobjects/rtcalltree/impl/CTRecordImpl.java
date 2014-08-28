@@ -5,6 +5,8 @@ package com.mpobjects.rtcalltree.impl;
 
 import java.lang.reflect.Method;
 
+import javax.annotation.Nonnull;
+
 import com.mpobjects.rtcalltree.CTRecord;
 
 /**
@@ -12,23 +14,20 @@ import com.mpobjects.rtcalltree.CTRecord;
  */
 public class CTRecordImpl implements CTRecord {
 
-	private final Class<?> klass;
-
-	private final Method method;
-
 	private final Object[] arguments;
-
-	private final int depth;
-
-	private final long startTime;
 
 	private long deltaTime;
 
-	public CTRecordImpl(int aDepth, long aStartTime, Class<?> aKlass, Method aMethod, Object[] aArguments) {
+	private final int depth;
+
+	private final Method method;
+
+	private final long startTime;
+
+	public CTRecordImpl(int aDepth, long aStartTime, @Nonnull Method aMethod, Object[] aArguments) {
 		deltaTime = -1;
 		startTime = aStartTime;
 		depth = aDepth;
-		klass = aKlass;
 		method = aMethod;
 		arguments = aArguments;
 	}
@@ -68,11 +67,6 @@ public class CTRecordImpl implements CTRecord {
 	@Override
 	public int getDepth() {
 		return depth;
-	}
-
-	@Override
-	public Class<?> getKlass() {
-		return klass;
 	}
 
 	@Override

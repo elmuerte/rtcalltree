@@ -3,8 +3,10 @@
  */
 package com.mpobjects.rtcalltree.conv;
 
+import javax.annotation.CheckForNull;
+
 /**
- * Nullifies the arguments
+ * No conversion done, arguments are simply not recorded.
  */
 public final class NullArgumentConverter implements ArgumentConverter {
 
@@ -14,7 +16,8 @@ public final class NullArgumentConverter implements ArgumentConverter {
 	}
 
 	@Override
-	public Object[] convertArguments(Object[] aArguments) {
+	@CheckForNull
+	public Object[] convertArguments(@CheckForNull Object[] aArguments) {
 		return null;
 	}
 

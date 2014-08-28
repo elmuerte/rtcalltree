@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file defines bug exclusion rules. Only add exclusions for specific 
-	methods and bugs, and please add the reason why it should be excluded. -->
+<!-- This file defines bug exclusion rules. Only add exclusions for specific methods and bugs, and please add the reason 
+	why it should be excluded. -->
 <!-- See documentation: http://findbugs.sourceforge.net/manual/filter.html -->
 <FindBugsFilter>
 	<Match>
 		<Bug pattern="EI_EXPOSE_REP" />
-	  <Method name="getArguments" returns="java.lang.Object[]" params="" />
-    <Class name="com.mpobjects.rtcalltree.impl.CTRecordImpl" />
+		<Method name="getArguments" returns="java.lang.Object[]" params="" />
+		<Class name="com.mpobjects.rtcalltree.impl.CTRecordImpl" />
 	</Match>
-  <Match>
+	<Match>
 		<Bug pattern="EI_EXPOSE_REP2" />
-    <Method name="&lt;init&gt;"  />
-    <Class name="com.mpobjects.rtcalltree.impl.CTRecordImpl" />
+		<Method name="&lt;init&gt;" />
+		<Class name="com.mpobjects.rtcalltree.impl.CTRecordImpl" />
 	</Match>
 </FindBugsFilter>

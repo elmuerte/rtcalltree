@@ -3,10 +3,13 @@
  */
 package com.mpobjects.rtcalltree.conv;
 
+import javax.annotation.CheckForNull;
+
 /**
  * Convert the method arguments to values which are stored
  */
 public interface ArgumentConverter {
 
-	Object[] convertArguments(Object[] aArguments);
+	@CheckForNull
+	Object[] convertArguments(@CheckForNull Object[] aArguments);
 }
