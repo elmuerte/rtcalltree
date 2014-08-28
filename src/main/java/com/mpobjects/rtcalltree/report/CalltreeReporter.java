@@ -3,9 +3,13 @@
  */
 package com.mpobjects.rtcalltree.report;
 
+import java.util.List;
+
+import com.mpobjects.rtcalltree.MutableCalltreeEntry;
+
 /**
- * 
+ *
  */
 public interface CalltreeReporter {
-
+	void reportEndOfTree(List<MutableCalltreeEntry> aCallTree);
 }
