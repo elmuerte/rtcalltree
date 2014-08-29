@@ -28,12 +28,12 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 
 	private int depth;
 
-	private final long startTime;
+	private long startTime;
 
-	public CalltreeEntryImpl(long aStartTime, @Nonnull String aClassName, @Nonnull String aMethodName) {
+	public CalltreeEntryImpl(@Nonnull String aClassName, @Nonnull String aMethodName) {
+		startTime = -1;
 		depth = -1;
 		deltaTime = -1;
-		startTime = aStartTime;
 		className = aClassName;
 		methodName = aMethodName;
 	}
@@ -107,10 +107,6 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 		return startTime;
 	}
 
-	/**
-	 * @param aDepth
-	 *            the depth to set
-	 */
 	@Override
 	public void setDepth(int aDepth) {
 		depth = aDepth;
@@ -133,12 +129,20 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 	}
 
 	@Override
+	public void setStartTime(long aStartTime) {
+		if (startTime > -1) {
+			return;
+		}
+		startTime = aStartTime;
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < depth; ++i) {
 			sb.append('\t');
 		}
-		sb.append("+ [").append(depth).append("]");
+		sb.append("+ [").append(depth).append("] ");
 		sb.append("(").append(deltaTime).append("ns) ");
 		sb.append(className).append('.');
 		sb.append(methodName);

@@ -14,13 +14,17 @@ import com.mpobjects.rtcalltree.report.NullCalltreeReporter;
 /**
  * Manager of {@link CalltreeRecord} instances. The managed is usually called by one of the call calltree recorders.
  */
-public class CalltreeRecordManager {
+public class CalltreeRecordManager implements CalltreeRecordProvider {
 
-	protected static final CalltreeRecordManager INSTANCE = new CalltreeRecordManager();
+	private static final CalltreeRecordManager INSTANCE;
 
 	protected CalltreeReporter calltreeReporter;
 
 	protected ThreadLocal<CalltreeRecord> recorder;
+
+	static {
+		INSTANCE = new CalltreeRecordManager();
+	}
 
 	public CalltreeRecordManager() {
 		calltreeReporter = NullCalltreeReporter.INSTANCE;
@@ -32,8 +36,8 @@ public class CalltreeRecordManager {
 		};
 	}
 
-	public static CalltreeRecord getRecord() {
-		return INSTANCE.recorder.get();
+	public static final CalltreeRecordManager instance() {
+		return INSTANCE;
 	}
 
 	/**
@@ -42,11 +46,11 @@ public class CalltreeRecordManager {
 	 * @see CalltreeRecorder#start(Method, Object[])
 	 */
 	public static void start(@Nonnull MutableCalltreeEntry aRecord) {
-		getRecord().start(aRecord);
+		INSTANCE.getRecord().start(aRecord);
 	}
 
 	public static void stop(@Nonnull MutableCalltreeEntry aRecord) {
-		getRecord().stop(aRecord);
+		INSTANCE.getRecord().stop(aRecord);
 	}
 
 	/**
@@ -54,6 +58,11 @@ public class CalltreeRecordManager {
 	 */
 	public CalltreeReporter getCalltreeReporter() {
 		return calltreeReporter;
+	}
+
+	@Override
+	public CalltreeRecord getRecord() {
+		return recorder.get();
 	}
 
 	/**

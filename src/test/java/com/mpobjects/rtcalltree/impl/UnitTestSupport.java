@@ -20,7 +20,7 @@ public class UnitTestSupport {
 	 * @return
 	 */
 	public static final boolean resetThreadRecord() {
-		CalltreeRecord rec = CalltreeRecordManager.getRecord();
+		CalltreeRecord rec = CalltreeRecordManager.instance().getRecord();
 		if (rec instanceof CalltreeRecordImpl) {
 			((CalltreeRecordImpl) rec).initRecord();
 			return true;

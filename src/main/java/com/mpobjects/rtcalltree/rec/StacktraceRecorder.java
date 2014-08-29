@@ -81,12 +81,11 @@ public final class StacktraceRecorder {
 	 * @return
 	 */
 	static MutableCalltreeEntry createEntry() {
-		final long startTime = System.nanoTime();
 		StackTraceElement[] elms = Thread.currentThread().getStackTrace();
 		if (elms.length <= STACK_OFFSET) {
 			return null;
 		}
-		CalltreeEntryImpl entry = new CalltreeEntryImpl(startTime, elms[STACK_OFFSET].getClassName(), elms[STACK_OFFSET].getMethodName());
+		CalltreeEntryImpl entry = new CalltreeEntryImpl(elms[STACK_OFFSET].getClassName(), elms[STACK_OFFSET].getMethodName());
 		entry.setSourceFilename(elms[1].getFileName());
 		entry.setSourceLine(elms[STACK_OFFSET].getLineNumber());
 		return entry;

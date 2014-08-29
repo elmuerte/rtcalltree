@@ -5,7 +5,7 @@ package com.mpobjects.rtcalltree.report;
 
 import java.util.List;
 
-import com.mpobjects.rtcalltree.MutableCalltreeEntry;
+import com.mpobjects.rtcalltree.CalltreeEntry;
 
 /**
  * A reported that does not do anything.
@@ -18,7 +18,7 @@ public final class NullCalltreeReporter implements CalltreeReporter {
 	}
 
 	@Override
-	public void reportEndOfTree(List<MutableCalltreeEntry> aCallTree) {
+	public void reportEndOfTree(List<? extends CalltreeEntry> aCallTree) {
 		// nop
 	}
 
