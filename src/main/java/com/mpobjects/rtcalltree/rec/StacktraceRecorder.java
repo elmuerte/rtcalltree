@@ -64,7 +64,9 @@ public final class StacktraceRecorder extends BasicRecorder {
 	}
 
 	/**
-	 * @return the current instance of the stack trace recorder.
+	 * Get the current instance of this recorder. This will allow you to change the configuration of the provider, etc.
+	 *
+	 * @return the current instance of the {@link StacktraceRecorder}.
 	 */
 	public static final StacktraceRecorder getRecorderInstance() {
 		return INSTANCE.get();
