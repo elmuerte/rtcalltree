@@ -43,6 +43,7 @@ public class CalltreeRecordImpl implements CalltreeRecord {
 
 	@Override
 	public void start(@Nonnull MutableCalltreeEntry aEntry) {
+		aEntry.setParent(lastEntry);
 		aEntry.setDepth(currentDepth++);
 		aEntry.setStartTime(System.nanoTime());
 		entries.add(aEntry);
@@ -53,13 +54,15 @@ public class CalltreeRecordImpl implements CalltreeRecord {
 	public void stop(@Nonnull MutableCalltreeEntry aEntry) {
 		final long endTime = System.nanoTime();
 		if (lastEntry != aEntry) {
-			LOG.error("Stopped entry \"{}\" is not the last started entry \"{}\"", aEntry, lastEntry);
+			IllegalStateException e = new IllegalStateException();
+			LOG.error("Stopped entry \"" + aEntry.toString() + "\" is not the last started entry \"" + lastEntry.toString() + "\"", e);
 			// TODO: something wrong
 			return;
 		}
 		// might already have been called.
 		aEntry.endRecord(endTime);
 		currentDepth = aEntry.getDepth();
+		lastEntry = aEntry.getParent();
 		if (currentDepth == 0) {
 			endOfCallTree();
 		}

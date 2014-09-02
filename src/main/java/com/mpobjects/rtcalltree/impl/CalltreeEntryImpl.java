@@ -30,6 +30,8 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 
 	private long startTime;
 
+	private MutableCalltreeEntry parent;
+
 	public CalltreeEntryImpl(@Nonnull String aClassName, @Nonnull String aMethodName) {
 		startTime = -1;
 		depth = -1;
@@ -60,7 +62,7 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 			return;
 		}
 		deltaTime = Math.max(0, aTimestamp - startTime);
-	}
+	};
 
 	@Override
 	public String getClassName() {
@@ -93,6 +95,11 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 	}
 
 	@Override
+	public MutableCalltreeEntry getParent() {
+		return parent;
+	}
+
+	@Override
 	public String getSourceFilename() {
 		return sourceFilename;
 	}
@@ -118,6 +125,11 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 
 	public void setParameterValues(Object[] aParameterValues) {
 		parameterValues = aParameterValues;
+	}
+
+	@Override
+	public void setParent(MutableCalltreeEntry aParent) {
+		parent = aParent;
 	}
 
 	public void setSourceFilename(String aSourceFilename) {

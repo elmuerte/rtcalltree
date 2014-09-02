@@ -49,6 +49,9 @@ public interface CalltreeEntry {
 	@CheckForNull
 	Object[] getParameterValues();
 
+	@CheckForNull
+	CalltreeEntry getParent();
+
 	/**
 	 * @return filename when the method is declared, or null if not recorded
 	 */
