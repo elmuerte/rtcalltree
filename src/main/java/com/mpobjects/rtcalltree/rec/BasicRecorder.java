@@ -11,15 +11,15 @@ import com.mpobjects.rtcalltree.impl.CalltreeEntryImpl;
 /**
  * A basic instantiated calltree recorder.
  */
-public class BasicRecorder extends AbstractInstantiatedRecorder {
+public class BasicRecorder extends AbstractInstantiatedRecorder implements CalltreeRecorderService {
 
 	/**
 	 * Calltree record token created by a call to a start method. Should be provided in the stop call to end a record.
 	 */
-	public static final class RecordToken {
+	public static final class RecordTokenImpl implements RecordToken {
 		protected MutableCalltreeEntry entry;
 
-		protected RecordToken(@Nonnull MutableCalltreeEntry aEntry) {
+		protected RecordTokenImpl(@Nonnull MutableCalltreeEntry aEntry) {
 			entry = aEntry;
 		}
 
@@ -40,6 +40,7 @@ public class BasicRecorder extends AbstractInstantiatedRecorder {
 	 * @param aParameterValues
 	 * @return
 	 */
+	@Override
 	public final RecordToken start(@Nonnull Class<?> aClass, @Nonnull String aMethodName, Object... aParameterValues) {
 		if (aClass == null) {
 			return null;
@@ -55,6 +56,7 @@ public class BasicRecorder extends AbstractInstantiatedRecorder {
 	 * @param aParameterValues
 	 * @return
 	 */
+	@Override
 	public final RecordToken start(@Nonnull Object aInstance, @Nonnull String aMethodName, Object... aParameterValues) {
 		if (aInstance == null) {
 			return null;
@@ -70,6 +72,7 @@ public class BasicRecorder extends AbstractInstantiatedRecorder {
 	 * @param aParameterValues
 	 * @return
 	 */
+	@Override
 	public final RecordToken start(@Nonnull String aClassname, @Nonnull String aMethodName, Object... aParameterValues) {
 		return startInternal(createEntry(aClassname, aMethodName, aParameterValues));
 	}
@@ -79,11 +82,16 @@ public class BasicRecorder extends AbstractInstantiatedRecorder {
 	 *
 	 * @param aToken
 	 */
+	@Override
 	public final void stop(@Nonnull RecordToken aToken) {
 		if (aToken == null) {
 			return;
 		}
-		calltreeRecordProvider.getRecord().stop(aToken.getEntry());
+		if (!(aToken instanceof RecordTokenImpl)) {
+			// TODO: report illegal state
+			return;
+		}
+		calltreeRecordProvider.getRecord().stop(((RecordTokenImpl) aToken).getEntry());
 	}
 
 	/**
@@ -108,8 +116,8 @@ public class BasicRecorder extends AbstractInstantiatedRecorder {
 	 * @param aEntry
 	 * @return
 	 */
-	protected final RecordToken startInternal(@Nonnull final MutableCalltreeEntry aEntry) {
-		final RecordToken token = new RecordToken(aEntry);
+	protected final RecordTokenImpl startInternal(@Nonnull final MutableCalltreeEntry aEntry) {
+		final RecordTokenImpl token = new RecordTokenImpl(aEntry);
 		calltreeRecordProvider.getRecord().start(aEntry);
 		return token;
 	}

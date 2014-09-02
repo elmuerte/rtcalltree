@@ -39,15 +39,15 @@ public final class StacktraceRecorder extends BasicRecorder {
 	 */
 	private static final int STACK_OFFSET = 3;
 
-	private static final ThreadLocal<Stack<RecordToken>> ENTRY_STACK;
+	private static final ThreadLocal<Stack<RecordTokenImpl>> ENTRY_STACK;
 
 	private static final InheritableThreadLocal<StacktraceRecorder> INSTANCE;
 
 	static {
-		ENTRY_STACK = new ThreadLocal<Stack<RecordToken>>() {
+		ENTRY_STACK = new ThreadLocal<Stack<RecordTokenImpl>>() {
 			@Override
-			protected Stack<RecordToken> initialValue() {
-				return new Stack<RecordToken>();
+			protected Stack<RecordTokenImpl> initialValue() {
+				return new Stack<RecordTokenImpl>();
 			}
 		};
 
@@ -73,16 +73,16 @@ public final class StacktraceRecorder extends BasicRecorder {
 	}
 
 	public static final void start(Object... aParameterValues) {
-		final RecordToken entry = INSTANCE.get().startRecorder(aParameterValues);
+		final RecordTokenImpl entry = INSTANCE.get().startRecorder(aParameterValues);
 		ENTRY_STACK.get().push(entry);
 	}
 
 	public static final void stop() {
 		final long endTime = System.nanoTime();
 
-		Stack<RecordToken> stack = ENTRY_STACK.get();
+		Stack<RecordTokenImpl> stack = ENTRY_STACK.get();
 		while (!stack.isEmpty()) {
-			RecordToken entry = stack.pop();
+			RecordTokenImpl entry = stack.pop();
 			// TODO: check if current stack matches
 			entry.getEntry().endRecord(endTime);
 			INSTANCE.get().stop(entry);
@@ -94,7 +94,7 @@ public final class StacktraceRecorder extends BasicRecorder {
 	 * @param aParameterValues
 	 * @return
 	 */
-	protected RecordToken startRecorder(Object... aParameterValues) {
+	protected RecordTokenImpl startRecorder(Object... aParameterValues) {
 		StackTraceElement[] elms = Thread.currentThread().getStackTrace();
 		if (elms.length <= STACK_OFFSET) {
 			return null;
