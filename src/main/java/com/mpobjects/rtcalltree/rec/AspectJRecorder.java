@@ -47,6 +47,7 @@ public class AspectJRecorder {
 		} catch (Throwable e) {
 			throw e;
 		} finally {
+			entry.endRecord();
 			record.stop(entry);
 		}
 	}

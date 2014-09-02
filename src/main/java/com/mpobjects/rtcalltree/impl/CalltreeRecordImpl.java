@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mpobjects.rtcalltree.CalltreeRecord;
 import com.mpobjects.rtcalltree.MutableCalltreeEntry;
 import com.mpobjects.rtcalltree.report.CalltreeReporter;
@@ -16,6 +19,8 @@ import com.mpobjects.rtcalltree.report.CalltreeReporter;
  *
  */
 public class CalltreeRecordImpl implements CalltreeRecord {
+
+	private static final Logger LOG = LoggerFactory.getLogger(CalltreeRecordImpl.class);
 
 	protected List<MutableCalltreeEntry> entries;
 
@@ -46,10 +51,14 @@ public class CalltreeRecordImpl implements CalltreeRecord {
 
 	@Override
 	public void stop(@Nonnull MutableCalltreeEntry aEntry) {
+		final long endTime = System.nanoTime();
 		if (lastEntry != aEntry) {
+			LOG.error("Stopped entry \"{}\" is not the last started entry \"{}\"", aEntry, lastEntry);
 			// TODO: something wrong
 			return;
 		}
+		// might already have been called.
+		aEntry.endRecord(endTime);
 		currentDepth = aEntry.getDepth();
 		if (currentDepth == 0) {
 			endOfCallTree();
