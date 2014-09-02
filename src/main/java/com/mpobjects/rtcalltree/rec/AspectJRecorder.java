@@ -73,8 +73,11 @@ public class AspectJRecorder {
 		final String className = signature.getDeclaringTypeName();
 		final String methodName = signature.getName();
 		CalltreeEntryImpl entry = new CalltreeEntryImpl(className, methodName);
-		entry.setSourceFilename(aJoinPoint.getSourceLocation().getFileName());
-		entry.setSourceLine(aJoinPoint.getSourceLocation().getLine());
+		// Spring AOP throws exceptions on getFileName() etc. instead of just returning null for SourceLocation
+		// if (aJoinPoint.getSourceLocation() != null) {
+		// entry.setSourceFilename(aJoinPoint.getSourceLocation().getFileName());
+		// entry.setSourceLine(aJoinPoint.getSourceLocation().getLine());
+		// }
 		if (argumentConverter != null && aJoinPoint.getArgs() != null) {
 			entry.setParameterValues(argumentConverter.convertArguments(aJoinPoint.getArgs()));
 		}
