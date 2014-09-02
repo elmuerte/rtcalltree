@@ -3,8 +3,6 @@
  */
 package com.mpobjects.rtcalltree;
 
-import java.lang.reflect.Method;
-
 import javax.annotation.Nonnull;
 
 import com.mpobjects.rtcalltree.impl.CalltreeRecordImpl;
@@ -12,7 +10,7 @@ import com.mpobjects.rtcalltree.report.CalltreeReporter;
 import com.mpobjects.rtcalltree.report.NullCalltreeReporter;
 
 /**
- * Manager of {@link CalltreeRecord} instances. The managed is usually called by one of the call calltree recorders.
+ * Manager of {@link CalltreeRecord} instances.
  */
 public class CalltreeRecordManager implements CalltreeRecordProvider {
 
@@ -38,19 +36,6 @@ public class CalltreeRecordManager implements CalltreeRecordProvider {
 
 	public static final CalltreeRecordManager instance() {
 		return INSTANCE;
-	}
-
-	/**
-	 * @param aMethod
-	 * @param aArguments
-	 * @see CalltreeRecorder#start(Method, Object[])
-	 */
-	public static void start(@Nonnull MutableCalltreeEntry aRecord) {
-		INSTANCE.getRecord().start(aRecord);
-	}
-
-	public static void stop(@Nonnull MutableCalltreeEntry aRecord) {
-		INSTANCE.getRecord().stop(aRecord);
 	}
 
 	/**

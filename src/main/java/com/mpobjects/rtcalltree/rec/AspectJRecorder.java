@@ -3,39 +3,22 @@
  */
 package com.mpobjects.rtcalltree.rec;
 
-import javax.annotation.Nonnull;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.CodeSignature;
 
 import com.mpobjects.rtcalltree.CalltreeRecord;
-import com.mpobjects.rtcalltree.CalltreeRecordManager;
-import com.mpobjects.rtcalltree.CalltreeRecordProvider;
 import com.mpobjects.rtcalltree.MutableCalltreeEntry;
-import com.mpobjects.rtcalltree.conv.ArgumentConverter;
 import com.mpobjects.rtcalltree.impl.CalltreeEntryImpl;
 
 /**
  * A calltree recorder which can be used with an AspectJ around advice. From an advice simply call the
  * {@link #record(ProceedingJoinPoint)} method.
  */
-public class AspectJRecorder {
-
-	protected CalltreeRecordProvider calltreeRecordProvider;
-
-	protected ArgumentConverter argumentConverter;
+public class AspectJRecorder extends AbstractInstantiatedRecorder {
 
 	public AspectJRecorder() {
-		calltreeRecordProvider = CalltreeRecordManager.instance();
-	}
-
-	public ArgumentConverter getArgumentConverter() {
-		return argumentConverter;
-	}
-
-	public CalltreeRecordProvider getCalltreeRecordProvider() {
-		return calltreeRecordProvider;
+		super();
 	}
 
 	public Object record(ProceedingJoinPoint aJoinPoint) throws Throwable {
@@ -49,19 +32,6 @@ public class AspectJRecorder {
 		} finally {
 			record.stop(entry);
 		}
-	}
-
-	/**
-	 * Set the parameter converter. If set to null (the default) parameter values will not be recorded.
-	 *
-	 * @param aArgumentConverter
-	 */
-	public void setArgumentConverter(ArgumentConverter aArgumentConverter) {
-		argumentConverter = aArgumentConverter;
-	}
-
-	public void setCalltreeRecordProvider(@Nonnull CalltreeRecordProvider aCalltreeRecordProvider) {
-		calltreeRecordProvider = aCalltreeRecordProvider;
 	}
 
 	/**

@@ -5,15 +5,13 @@ package com.mpobjects.rtcalltree.rec;
 
 import java.util.Stack;
 
-import com.mpobjects.rtcalltree.CalltreeRecordManager;
-import com.mpobjects.rtcalltree.MutableCalltreeEntry;
 import com.mpobjects.rtcalltree.impl.CalltreeEntryImpl;
 
 /**
  * Produces calltree entries based on the current stacktree. This is very easy recorder, but it does come with with a
  * lot of overhead due to the fact that a stacktrace is created.
  * <p>
- * This reportin is only able to record the following attributes:
+ * This recorder is only able to record the following attributes:
  * <ul>
  * <li>Classname
  * <li>Method name
@@ -34,61 +32,76 @@ import com.mpobjects.rtcalltree.impl.CalltreeEntryImpl;
  * }
  * </pre>
  */
-public final class StacktraceRecorder {
+public final class StacktraceRecorder extends BasicRecorder {
 
 	/**
-	 * Offset in the stack where {@link #createEntry()} should get the information from
+	 * Offset in the stack where {@link #startRecorder(Object...)} should get the information from
 	 */
 	private static final int STACK_OFFSET = 3;
 
-	private static final ThreadLocal<Stack<MutableCalltreeEntry>> ENTRY_STACK;
+	private static final ThreadLocal<Stack<RecordToken>> ENTRY_STACK;
+
+	private static final InheritableThreadLocal<StacktraceRecorder> INSTANCE;
 
 	static {
-		ENTRY_STACK = new ThreadLocal<Stack<MutableCalltreeEntry>>() {
+		ENTRY_STACK = new ThreadLocal<Stack<RecordToken>>() {
 			@Override
-			protected Stack<MutableCalltreeEntry> initialValue() {
-				return new Stack<MutableCalltreeEntry>();
+			protected Stack<RecordToken> initialValue() {
+				return new Stack<RecordToken>();
+			}
+		};
+
+		INSTANCE = new InheritableThreadLocal<StacktraceRecorder>() {
+			@Override
+			protected StacktraceRecorder initialValue() {
+				return new StacktraceRecorder();
 			}
 		};
 	}
 
-	private StacktraceRecorder() {
+	public StacktraceRecorder() {
+		super();
 	}
 
-	public static final void start() {
-		final MutableCalltreeEntry entry = createEntry();
-		if (entry == null) {
-			return;
-		}
-		CalltreeRecordManager.start(entry);
+	/**
+	 * @return the current instance of the stack trace recorder.
+	 */
+	public static final StacktraceRecorder getRecorderInstance() {
+		return INSTANCE.get();
+	}
+
+	public static final void start(Object... aParameterValues) {
+		final RecordToken entry = INSTANCE.get().startRecorder(aParameterValues);
 		ENTRY_STACK.get().push(entry);
 	}
 
 	public static final void stop() {
 		final long endTime = System.nanoTime();
 
-		Stack<MutableCalltreeEntry> stack = ENTRY_STACK.get();
+		Stack<RecordToken> stack = ENTRY_STACK.get();
 		while (!stack.isEmpty()) {
-			MutableCalltreeEntry entry = stack.pop();
+			RecordToken entry = stack.pop();
 			// TODO: check if current stack matches
-			entry.endRecord(endTime);
-			CalltreeRecordManager.stop(entry);
+			entry.getEntry().endRecord(endTime);
+			INSTANCE.get().stop(entry);
 			break;
 		}
 	}
 
 	/**
+	 * @param aParameterValues
 	 * @return
 	 */
-	static MutableCalltreeEntry createEntry() {
+	protected RecordToken startRecorder(Object... aParameterValues) {
 		StackTraceElement[] elms = Thread.currentThread().getStackTrace();
 		if (elms.length <= STACK_OFFSET) {
 			return null;
 		}
-		CalltreeEntryImpl entry = new CalltreeEntryImpl(elms[STACK_OFFSET].getClassName(), elms[STACK_OFFSET].getMethodName());
-		entry.setSourceFilename(elms[1].getFileName());
-		entry.setSourceLine(elms[STACK_OFFSET].getLineNumber());
-		return entry;
-	}
+		CalltreeEntryImpl entry = createEntry(elms[STACK_OFFSET].getClassName(), elms[STACK_OFFSET].getMethodName(), aParameterValues);
 
+		entry.setSourceFilename(elms[STACK_OFFSET].getFileName());
+		entry.setSourceLine(elms[STACK_OFFSET].getLineNumber());
+
+		return startInternal(entry);
+	}
 }

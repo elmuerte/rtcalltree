@@ -15,12 +15,7 @@ import com.mpobjects.rtcalltree.CalltreeEntry;
 /**
  *
  */
-public class Slf4jReporter implements CalltreeReporter {
-
-	/**
-	 * Minimum depth to be reached before reporting the calltree
-	 */
-	protected int minimumReportDepth = 1;
+public class Slf4jReporter extends AbstractCalltreeReporter {
 
 	protected Logger logger;
 
@@ -28,15 +23,8 @@ public class Slf4jReporter implements CalltreeReporter {
 		setLoggerName(aLoggerName);
 	}
 
-	/**
-	 * @return the minimumReportDepth
-	 */
-	public int getMinimumReportDepth() {
-		return minimumReportDepth;
-	}
-
 	@Override
-	public void reportEndOfTree(List<? extends CalltreeEntry> aCallTree) {
+	public void reportEndOfTree(@Nonnull List<? extends CalltreeEntry> aCallTree) {
 		if (!logger.isDebugEnabled()) {
 			return;
 		}
@@ -52,29 +40,6 @@ public class Slf4jReporter implements CalltreeReporter {
 
 	public void setLoggerName(@Nonnull String aLoggerName) {
 		logger = LoggerFactory.getLogger(aLoggerName);
-	}
-
-	/**
-	 * @param aMinimumReportDepth
-	 *            the minimumReportDepth to set
-	 */
-	public void setMinimumReportDepth(int aMinimumReportDepth) {
-		minimumReportDepth = aMinimumReportDepth;
-	}
-
-	/**
-	 * Check if the minimum requirements for logging are met.
-	 *
-	 * @param aCallTree
-	 * @return
-	 */
-	protected boolean shouldReport(List<? extends CalltreeEntry> aCallTree) {
-		for (CalltreeEntry entry : aCallTree) {
-			if (entry.getDepth() >= minimumReportDepth) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

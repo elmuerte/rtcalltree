@@ -80,7 +80,7 @@ public class StacktraceRecorderTest {
 		 * This method exists just to add one extra entry to the call stack which would usually be occupied by the
 		 * start() method
 		 */
-		return StacktraceRecorder.createEntry();
+		return StacktraceRecorder.getRecorderInstance().startRecorder().getEntry();
 	}
 
 }
