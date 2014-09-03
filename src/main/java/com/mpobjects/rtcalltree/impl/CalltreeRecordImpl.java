@@ -88,7 +88,7 @@ public class CalltreeRecordImpl implements CalltreeRecord {
 	protected void endOfCallTree() {
 		final List<MutableCalltreeEntry> currentTree = entries;
 		initRecord();
-		calltreeReporter.reportEndOfTree(currentTree);
+		calltreeReporter.reportEndOfTree(Thread.currentThread().getName(), currentTree);
 	}
 
 	/**

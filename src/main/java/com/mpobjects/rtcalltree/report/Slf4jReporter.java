@@ -38,7 +38,7 @@ public class Slf4jReporter extends AbstractCalltreeReporter {
 	}
 
 	@Override
-	public void reportEndOfTree(@Nonnull List<? extends CalltreeEntry> aCallTree) {
+	public void reportEndOfTree(String aThreadName, @Nonnull List<? extends CalltreeEntry> aCallTree) {
 		if (!logger.isDebugEnabled()) {
 			return;
 		}

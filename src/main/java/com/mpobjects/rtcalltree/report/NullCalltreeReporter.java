@@ -32,7 +32,7 @@ public final class NullCalltreeReporter implements CalltreeReporter {
 	}
 
 	@Override
-	public void reportEndOfTree(List<? extends CalltreeEntry> aCallTree) {
+	public void reportEndOfTree(String aThreadName, List<? extends CalltreeEntry> aCallTree) {
 		// nop
 	}
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://system.mp-objects.com/schemas/RTCalltreeReport" elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:rtc="http://system.mp-objects.com/schemas/RTCalltreeReport">
+
+	<complexType name="report">
+		<sequence>
+			<element name="calltree" type="rtc:calltree" maxOccurs="unbounded" minOccurs="0"></element>
+		</sequence>
+		<attribute name="version" type="string" use="optional" default="1.0"></attribute>
+		<attribute name="timestamp" type="dateTime">
+			<annotation>
+				<documentation>Timestamp this report was created.</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+	<element name="report" type="rtc:report"></element>
+
+    <complexType name="calltree-entry">
+    	<sequence>
+    		<element name="parameter" type="rtc:call-parameter" maxOccurs="unbounded" minOccurs="0">
+    			<annotation>
+    				<documentation>Parameter information for this call tree entry.</documentation>
+    			</annotation></element>
+    		<element name="entry" type="rtc:calltree-entry" maxOccurs="unbounded" minOccurs="0">
+    			<annotation>
+    				<documentation>Child elements in the tree.</documentation>
+    			</annotation></element>
+    	</sequence>
+    	<attribute name="depth" type="int" use="required"></attribute>
+        <attribute name="start-time" type="dateTime" use="required"></attribute>
+        <attribute name="duration" type="int" use="required"></attribute>
+        <attribute name="class" type="string" use="required"></attribute>
+    	<attribute name="method" type="string" use="required"></attribute>
+    	<attribute name="source-file" type="string" use="optional"></attribute>
+    	<attribute name="source-line" type="int" use="optional"></attribute>
+    </complexType>
+
+    <complexType name="call-parameter">
+        <annotation>
+        	<documentation>Parameter value.</documentation>
+        </annotation>
+        <simpleContent>
+    		<extension base="string">
+    			<attribute name="type" type="string" use="optional">
+    				<annotation>
+    					<documentation>The type of parameter.</documentation>
+    				</annotation></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+
+    <complexType name="calltree">
+    	<sequence>
+    		<element name="entry" type="rtc:calltree-entry" maxOccurs="1" minOccurs="1">
+    			<annotation>
+    				<documentation>The root element of the calltree.</documentation>
+    			</annotation></element>
+    	</sequence>
+    	<attribute name="thread" type="string" use="optional">
+    		<annotation>
+    			<documentation>Thread name where this call tree was recorded.</documentation>
+    		</annotation></attribute>
+    </complexType>
+</schema>
