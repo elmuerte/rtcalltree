@@ -78,9 +78,9 @@ public class CalltreeRecordManager implements CalltreeRecordProvider {
 	 * @return a {@link CalltreeRecorder}
 	 */
 	protected CalltreeRecord newCalltreeRecorder() {
-		CalltreeRecordImpl recorder = new CalltreeRecordImpl();
-		recorder.setCalltreeReporter(calltreeReporter);
-		return recorder;
+		CalltreeRecordImpl rec = new CalltreeRecordImpl();
+		rec.setCalltreeReporter(calltreeReporter);
+		return rec;
 	}
 
 }
