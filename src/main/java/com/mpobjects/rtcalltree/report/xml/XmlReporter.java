@@ -145,7 +145,7 @@ public class XmlReporter extends AbstractCalltreeReporter {
 	 */
 	protected Writer createWriter(Date aCreationDate, String aThreadName) {
 		String filename = MessageFormat.format(filenamePattern, aCreationDate, aThreadName);
-		filename = filename.replaceAll("[/:]", "_");
+		filename = filename.replaceAll("[/: _]+", "_");
 		try {
 			return new OutputStreamWriter(new FileOutputStream(new File(destination, filename)), Charsets.UTF_8);
 		} catch (IOException e) {
