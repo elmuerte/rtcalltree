@@ -30,7 +30,7 @@ public interface CalltreeRecorderService {
 	 * A token returned by the start methods to be used to end the recording when passing to the stop method. You cannot
 	 * use tokens created by one recorder instance to pass it to another instance.
 	 */
-	public static interface RecordToken {
+	public interface RecordToken {
 	}
 
 	/**

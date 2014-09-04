@@ -82,16 +82,16 @@ public final class StacktraceRecorder extends BasicRecorder {
 	 *
 	 * @return the current instance of the {@link StacktraceRecorder}.
 	 */
-	public static final StacktraceRecorder getRecorderInstance() {
+	public static StacktraceRecorder getRecorderInstance() {
 		return INSTANCE.get();
 	}
 
-	public static final void start(Object... aParameterValues) {
+	public static void start(Object... aParameterValues) {
 		final RecordTokenImpl entry = INSTANCE.get().startRecorder(aParameterValues);
 		ENTRY_STACK.get().push(entry);
 	}
 
-	public static final void stop() {
+	public static void stop() {
 		final long endTime = System.nanoTime();
 
 		Stack<RecordTokenImpl> stack = ENTRY_STACK.get();
