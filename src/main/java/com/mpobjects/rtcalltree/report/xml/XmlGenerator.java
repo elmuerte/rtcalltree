@@ -18,11 +18,12 @@
 
 package com.mpobjects.rtcalltree.report.xml;
 
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -39,7 +40,7 @@ public class XmlGenerator {
 
 	public static final String VERSION = "1.0";
 
-	protected SimpleDateFormat iso8601format;
+	protected Calendar calendar;
 
 	protected XMLStreamWriter writer;
 
@@ -47,7 +48,7 @@ public class XmlGenerator {
 	 * @param aWriter
 	 */
 	public XmlGenerator(@Nonnull XMLStreamWriter aWriter) {
-		iso8601format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+		calendar = Calendar.getInstance();
 		writer = aWriter;
 	}
 
@@ -71,8 +72,10 @@ public class XmlGenerator {
 		writer.writeStartDocument();
 		writer.setDefaultNamespace(NAMESPACE);
 		writer.writeStartElement(NAMESPACE, "report");
+		writer.writeDefaultNamespace(NAMESPACE);
 		writer.writeAttribute("version", VERSION);
-		writer.writeAttribute("timestamp", iso8601format.format(aCreationDate));
+		calendar.setTime(aCreationDate);
+		writer.writeAttribute("timestamp", DatatypeConverter.printDateTime(calendar));
 
 	}
 
@@ -82,14 +85,17 @@ public class XmlGenerator {
 	 */
 	public void writeCallTree(String aThreadName, List<? extends CalltreeEntry> aCallTree) throws XMLStreamException {
 		writer.writeStartElement(NAMESPACE, "calltree");
-		writer.writeAttribute("calltree", aThreadName);
+		writer.writeAttribute("thread", aThreadName);
 		writeCallTreeEntry(aCallTree);
 		writer.writeEndElement();
 	}
 
 	protected void writeCallTreeEntry(CalltreeEntry aEntry) throws XMLStreamException {
 		writer.writeAttribute("depth", Integer.toString(aEntry.getDepth()));
-		writer.writeAttribute("start-time", iso8601format.format(new Date(aEntry.getStartTime() / 1000)));
+		if (aEntry.getTimestamp() > -1) {
+			calendar.setTimeInMillis(aEntry.getTimestamp());
+			writer.writeAttribute("start-time", DatatypeConverter.printDateTime(calendar));
+		}
 		writer.writeAttribute("duration", Long.toString(aEntry.getDeltaTime()));
 		writer.writeAttribute("class", aEntry.getClassName());
 		writer.writeAttribute("method", aEntry.getMethodName());
@@ -147,15 +153,14 @@ public class XmlGenerator {
 			if (vals.length > i) {
 				val = vals[i];
 			}
-			if (val == null) {
-				writer.writeEmptyElement(NAMESPACE, "parameter");
-			} else {
-				writer.writeEmptyElement(NAMESPACE, "parameter");
-				writer.writeCharacters(val.toString());
-			}
+			writer.writeStartElement(NAMESPACE, "parameter");
 			if (!StringUtils.isBlank(type)) {
 				writer.writeAttribute("type", type);
 			}
+			if (val != null) {
+				writer.writeCharacters(val.toString());
+			}
+			writer.writeEndElement();
 		}
 	}
 

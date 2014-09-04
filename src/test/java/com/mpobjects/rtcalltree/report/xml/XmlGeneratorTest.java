@@ -18,16 +18,28 @@
 
 package com.mpobjects.rtcalltree.report.xml;
 
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import com.mpobjects.rtcalltree.impl.CalltreeEntryImpl;
 
@@ -54,6 +66,7 @@ public class XmlGeneratorTest {
 		calltree.add(newEntry(3, "fizz.buzz", "frop"));
 		calltree.add(newEntry(1, "foo.bar.quux", "baz"));
 
+		// generate the XML
 		StringWriter writer = new StringWriter();
 		XMLOutputFactory factory = XMLOutputFactory.newInstance();
 		XMLStreamWriter xmlwriter = factory.createXMLStreamWriter(writer);
@@ -62,7 +75,32 @@ public class XmlGeneratorTest {
 		gen.writeCallTree("dummy", calltree);
 		gen.endReport();
 
-		System.out.println(writer.toString());
+		// parse the XML validating with the schema
+		DocumentBuilderFactory domfact = DocumentBuilderFactory.newInstance();
+		SchemaFactory schfact = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		Schema schema = schfact.newSchema(new StreamSource(XmlGenerator.class.getResourceAsStream("RTCalltreeReport.xsd")));
+		domfact.setSchema(schema);
+		domfact.setNamespaceAware(true);
+		DocumentBuilder builder = domfact.newDocumentBuilder();
+		builder.setErrorHandler(new ErrorHandler() {
+
+			@Override
+			public void error(SAXParseException aException) throws SAXException {
+				throw aException;
+			}
+
+			@Override
+			public void fatalError(SAXParseException aException) throws SAXException {
+				throw aException;
+			}
+
+			@Override
+			public void warning(SAXParseException aException) throws SAXException {
+				throw aException;
+			}
+		});
+		Document dom = builder.parse(new InputSource(new StringReader(writer.toString())));
+		// TODO: check content?
 	}
 
 	/**
@@ -75,7 +113,10 @@ public class XmlGeneratorTest {
 		CalltreeEntryImpl entry = new CalltreeEntryImpl(aClass, aMethod);
 		entry.setDepth(aDepth);
 		entry.setStartTime(System.nanoTime());
+		entry.setTimestamp(System.currentTimeMillis());
 		entry.endRecord(entry.getStartTime() + 123456);
+		entry.setParameterTypes(new String[] { "param1", "param2", "param3" });
+		entry.setParameterValues(new Object[] { true, 1, null, "foo" });
 		return entry;
 	}
 

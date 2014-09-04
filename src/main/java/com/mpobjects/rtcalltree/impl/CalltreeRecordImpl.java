@@ -59,9 +59,10 @@ public class CalltreeRecordImpl implements CalltreeRecord {
 	public void start(@Nonnull MutableCalltreeEntry aEntry) {
 		aEntry.setParent(lastEntry);
 		aEntry.setDepth(currentDepth++);
-		aEntry.setStartTime(System.nanoTime());
 		entries.add(aEntry);
 		lastEntry = aEntry;
+		aEntry.setTimestamp(System.currentTimeMillis());
+		aEntry.setStartTime(System.nanoTime());
 	}
 
 	@Override

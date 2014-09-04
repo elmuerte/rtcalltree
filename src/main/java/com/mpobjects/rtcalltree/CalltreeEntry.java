@@ -80,9 +80,17 @@ public interface CalltreeEntry {
 	int getSourceLine();
 
 	/**
-	 * The time the entry was created (and the call was started).
+	 * The start timestamp in nanosecond. This was populated with {@link System#nanoTime()}, which might not be an
+	 * actual timestamp.
 	 *
 	 * @return nanoseconds
 	 */
 	long getStartTime();
+
+	/**
+	 * Returns an actual timestamp, unlike {@link #getStartTime()}.
+	 *
+	 * @return milliseconds since epoch
+	 */
+	long getTimestamp();
 }

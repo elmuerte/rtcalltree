@@ -28,7 +28,7 @@
     			</annotation></element>
     	</sequence>
     	<attribute name="depth" type="int" use="required"></attribute>
-        <attribute name="start-time" type="dateTime" use="required"></attribute>
+        <attribute name="start-time" type="dateTime" use="optional"></attribute>
         <attribute name="duration" type="int" use="required"></attribute>
         <attribute name="class" type="string" use="required"></attribute>
     	<attribute name="method" type="string" use="required"></attribute>

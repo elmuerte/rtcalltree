@@ -49,9 +49,17 @@ public interface MutableCalltreeEntry extends CalltreeEntry {
 	void setParent(MutableCalltreeEntry aParent);
 
 	/**
-	 * Set the start timestamp. Can only be called once, subsequent calls should have no effect.
+	 * Set the start timestamp (for duration recording). Can only be called once, subsequent calls should have no
+	 * effect.
+	 *
+	 * @param aStartTime
+	 */
+	void setStartTime(long aStartTime);
+
+	/**
+	 * Set the timestamp (in miliseconds)
 	 *
 	 * @param aTimestamp
 	 */
-	void setStartTime(long aTimestamp);
+	void setTimestamp(long aTimestamp);
 }

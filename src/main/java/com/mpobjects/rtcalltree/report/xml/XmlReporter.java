@@ -19,8 +19,9 @@
 package com.mpobjects.rtcalltree.report.xml;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.MessageFormat;
 import java.util.Date;
@@ -31,6 +32,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,7 +147,7 @@ public class XmlReporter extends AbstractCalltreeReporter {
 		String filename = MessageFormat.format(filenamePattern, aCreationDate, aThreadName);
 		filename = filename.replaceAll("[/:]", "_");
 		try {
-			return new FileWriter(new File(destination, filename));
+			return new OutputStreamWriter(new FileOutputStream(new File(destination, filename)), Charsets.UTF_8);
 		} catch (IOException e) {
 			LOG.error("Unable to create file output stream for: " + filename + ". " + e.getMessage(), e);
 			return null;

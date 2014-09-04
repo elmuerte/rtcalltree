@@ -46,10 +46,13 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 
 	private MutableCalltreeEntry parent;
 
+	private long timestamp;
+
 	public CalltreeEntryImpl(@Nonnull String aClassName, @Nonnull String aMethodName) {
 		startTime = -1;
 		depth = -1;
 		deltaTime = -1;
+		timestamp = -1;
 		className = aClassName;
 		methodName = aMethodName;
 	}
@@ -76,7 +79,7 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 			return;
 		}
 		deltaTime = Math.max(0, aTimestamp - startTime);
-	};
+	}
 
 	@Override
 	public String getClassName() {
@@ -86,7 +89,7 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 	@Override
 	public long getDeltaTime() {
 		return deltaTime;
-	}
+	};
 
 	@Override
 	public int getDepth() {
@@ -128,6 +131,14 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 		return startTime;
 	}
 
+	/**
+	 * @return the timestamp
+	 */
+	@Override
+	public long getTimestamp() {
+		return timestamp;
+	}
+
 	@Override
 	public void setDepth(int aDepth) {
 		depth = aDepth;
@@ -160,6 +171,14 @@ public class CalltreeEntryImpl implements MutableCalltreeEntry {
 			return;
 		}
 		startTime = aStartTime;
+	}
+
+	@Override
+	public void setTimestamp(long aTimestamp) {
+		if (timestamp > -1) {
+			return;
+		}
+		timestamp = aTimestamp;
 	}
 
 	@Override
