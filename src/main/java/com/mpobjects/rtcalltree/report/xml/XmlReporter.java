@@ -52,7 +52,7 @@ public class XmlReporter extends AbstractCalltreeReporter {
 	protected String filenamePattern;
 
 	public XmlReporter() {
-		filenamePattern = "calltree-{0,date,YYYYMMdd-mmssSSS}-{1}.xml";
+		filenamePattern = "calltree-{0,date,yyyyMMdd-HHmmssSSS}-{1}.xml";
 	}
 
 	/**
