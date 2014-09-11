@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mpobjects</groupId>
 	<artifactId>rtcalltree</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>Runtime Call-Tree recorder</name>
 	<description>Provides functionality to record method call trees at runtime. This can help you get insight in how your program executes.</description>
 

@@ -33,6 +33,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ import com.mpobjects.rtcalltree.CalltreeEntry;
 import com.mpobjects.rtcalltree.report.AbstractCalltreeReporter;
 
 /**
- *
+ * Generates XML files for each calltree report.
  */
 public class XmlReporter extends AbstractCalltreeReporter {
 
@@ -145,11 +146,13 @@ public class XmlReporter extends AbstractCalltreeReporter {
 	 */
 	protected Writer createWriter(Date aCreationDate, String aThreadName) {
 		String filename = MessageFormat.format(filenamePattern, aCreationDate, aThreadName);
-		filename = filename.replaceAll("[/: _]+", "_");
+		filename = filename.replaceAll("[: _]+", "_");
+		File outfile = new File(destination, filename);
 		try {
-			return new OutputStreamWriter(new FileOutputStream(new File(destination, filename)), Charsets.UTF_8);
+			FileUtils.forceMkdir(outfile.getParentFile());
+			return new OutputStreamWriter(new FileOutputStream(outfile), Charsets.UTF_8);
 		} catch (IOException e) {
-			LOG.error("Unable to create file output stream for: " + filename + ". " + e.getMessage(), e);
+			LOG.error("Unable to create file output stream for: " + outfile.toString() + ". " + e.getMessage(), e);
 			return null;
 		}
 	}

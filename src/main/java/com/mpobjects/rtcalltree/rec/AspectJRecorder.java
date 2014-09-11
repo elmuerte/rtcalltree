@@ -17,6 +17,8 @@
  */
 package com.mpobjects.rtcalltree.rec;
 
+import java.lang.reflect.Proxy;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.CodeSignature;
@@ -54,10 +56,16 @@ public class AspectJRecorder extends AbstractInstantiatedRecorder {
 	 */
 	protected MutableCalltreeEntry createEntry(ProceedingJoinPoint aJoinPoint) {
 		final Signature signature = aJoinPoint.getSignature();
-		final String className = signature.getDeclaringTypeName();
+		String className = signature.getDeclaringTypeName();
 		final String methodName = signature.getName();
+		final Object target = aJoinPoint.getTarget();
+		if (target != null) {
+			if (!Proxy.isProxyClass(target.getClass())) {
+				className = target.getClass().getName();
+			}
+		}
 		CalltreeEntryImpl entry = new CalltreeEntryImpl(className, methodName);
-		// Spring AOP throws exceptions on getFileName() etc. instead of just returning null for SourceLocation
+		/* Spring AOP throws exceptions on getFileName() etc. instead of just returning null for SourceLocation */
 		// if (aJoinPoint.getSourceLocation() != null) {
 		// entry.setSourceFilename(aJoinPoint.getSourceLocation().getFileName());
 		// entry.setSourceLine(aJoinPoint.getSourceLocation().getLine());

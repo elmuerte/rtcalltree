@@ -4,6 +4,8 @@
 
 	<xsl:output method="html" doctype-public="html" />
 
+	<xsl:param name="combineRepeats" select="true()" />
+
 	<xsl:template match="/">
 		<html>
 			<head>
@@ -75,7 +77,7 @@
 		<xsl:variable name="isSame"
 			select="$prev/@depth = @depth and $prev/@class = @class and $prev/@method = @method and count($prev/rct:parameter) = count(rct:parameter) and count(rct:entry) = 0" />
 
-		<xsl:if test="not($isSame)">
+		<xsl:if test="not($isSame) or not($combineRepeats)">
 			<xsl:variable name="next" select="following-sibling::rct:entry[1]" />
 			<xsl:variable name="isNextSame"
 				select="$next/@depth = @depth and $next/@class = @class and $next/@method = @method and count($next/rct:parameter) = count(rct:parameter) and count(rct:entry) = 0" />
@@ -124,7 +126,7 @@
 				</td>
 			</tr>
 
-			<xsl:if test="$isNextSame">
+			<xsl:if test="$isNextSame and $combineRepeats">
 				<xsl:apply-templates select="." mode="collapse" />
 			</xsl:if>
 		</xsl:if>
