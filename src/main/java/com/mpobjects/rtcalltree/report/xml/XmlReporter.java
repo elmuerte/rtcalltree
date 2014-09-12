@@ -150,6 +150,7 @@ public class XmlReporter extends AbstractCalltreeReporter {
 		File outfile = new File(destination, filename);
 		try {
 			FileUtils.forceMkdir(outfile.getParentFile());
+			LOG.debug("Writing XML report to {}", outfile.toString());
 			return new OutputStreamWriter(new FileOutputStream(outfile), Charsets.UTF_8);
 		} catch (IOException e) {
 			LOG.error("Unable to create file output stream for: " + outfile.toString() + ". " + e.getMessage(), e);

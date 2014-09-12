@@ -30,6 +30,8 @@ import com.mpobjects.rtcalltree.impl.CalltreeEntryImpl;
 /**
  * A calltree recorder which can be used with an AspectJ around advice. From an advice simply call the
  * {@link #record(ProceedingJoinPoint)} method.
+ * <p>
+ * When using the Spring Framework using the AspectJRecorder is probably the best approach.
  */
 public class AspectJRecorder extends AbstractInstantiatedRecorder {
 

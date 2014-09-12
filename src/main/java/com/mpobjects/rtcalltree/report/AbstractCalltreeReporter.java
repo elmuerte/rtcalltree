@@ -38,10 +38,16 @@ public abstract class AbstractCalltreeReporter implements CalltreeReporter {
 	protected int minimumReportSize = 2;
 
 	/**
+	 * Enable/disable a reporter completely.
+	 */
+	protected boolean enabled;
+
+	/**
 	 *
 	 */
 	protected AbstractCalltreeReporter() {
 		super();
+		enabled = true;
 	}
 
 	/**
@@ -56,6 +62,21 @@ public abstract class AbstractCalltreeReporter implements CalltreeReporter {
 	 */
 	public int getMinimumReportSize() {
 		return minimumReportSize;
+	}
+
+	/**
+	 * @return the enabled
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * @param aEnabled
+	 *            the enabled to set
+	 */
+	public void setEnabled(boolean aEnabled) {
+		enabled = aEnabled;
 	}
 
 	/**
@@ -81,6 +102,9 @@ public abstract class AbstractCalltreeReporter implements CalltreeReporter {
 	 * @return
 	 */
 	protected boolean shouldReport(@Nonnull List<? extends CalltreeEntry> aCallTree) {
+		if (!enabled) {
+			return false;
+		}
 		if (aCallTree.size() < minimumReportSize) {
 			return false;
 		}

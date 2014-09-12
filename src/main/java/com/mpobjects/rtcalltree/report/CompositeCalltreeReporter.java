@@ -18,31 +18,42 @@
 
 package com.mpobjects.rtcalltree.report;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import com.mpobjects.rtcalltree.CalltreeEntry;
 
 /**
- *
+ * This reporter simply forwards the report requests to a set of reporters.
  */
-public class CompositeCalltreeReporter implements CalltreeReporter {
+public class CompositeCalltreeReporter extends AbstractCalltreeReporter {
 
-	protected Set<CalltreeReporter> reporters;
+	protected Collection<? extends CalltreeReporter> reporters;
 
 	public CompositeCalltreeReporter() {
+		super();
+		minimumReportDepth = 0;
+		minimumReportSize = 0;
+	}
+
+	public CompositeCalltreeReporter(Collection<? extends CalltreeReporter> aReporters) {
+		this();
+		setReporters(aReporters);
 	}
 
 	/**
 	 * @return the reporters
 	 */
-	public Set<CalltreeReporter> getReporters() {
+	public Collection<? extends CalltreeReporter> getReporters() {
 		return reporters;
 	}
 
 	@Override
 	public void reportEndOfTree(String aThreadName, List<? extends CalltreeEntry> aCallTree) {
 		if (reporters == null) {
+			return;
+		}
+		if (!shouldReport(aCallTree)) {
 			return;
 		}
 		for (CalltreeReporter rep : reporters) {
@@ -55,9 +66,9 @@ public class CompositeCalltreeReporter implements CalltreeReporter {
 
 	/**
 	 * @param aReporters
-	 *            the reporters to set
+	 *            the reporters to call
 	 */
-	public void setReporters(Set<CalltreeReporter> aReporters) {
+	public void setReporters(Collection<? extends CalltreeReporter> aReporters) {
 		reporters = aReporters;
 	}
 

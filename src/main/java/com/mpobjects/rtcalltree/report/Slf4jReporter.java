@@ -27,11 +27,14 @@ import org.slf4j.LoggerFactory;
 import com.mpobjects.rtcalltree.CalltreeEntry;
 
 /**
- *
+ * Reporter which sends the report to SLF4J using the logger category constructed using the base logger name, and a
+ * sanitized thread name.
  */
 public class Slf4jReporter extends AbstractCalltreeReporter {
 
-	protected Logger logger;
+	protected String baseLoggerName;
+
+	protected Logger baseLogger;
 
 	public Slf4jReporter(@Nonnull String aLoggerName) {
 		setLoggerName(aLoggerName);
@@ -39,10 +42,14 @@ public class Slf4jReporter extends AbstractCalltreeReporter {
 
 	@Override
 	public void reportEndOfTree(String aThreadName, @Nonnull List<? extends CalltreeEntry> aCallTree) {
-		if (!logger.isDebugEnabled()) {
+		if (!baseLogger.isDebugEnabled()) {
 			return;
 		}
 		if (!shouldReport(aCallTree)) {
+			return;
+		}
+		Logger logger = LoggerFactory.getLogger(getLoggerName(aThreadName));
+		if (!baseLogger.isDebugEnabled()) {
 			return;
 		}
 		logger.debug("START Calltree #{}", System.identityHashCode(aCallTree));
@@ -53,7 +60,16 @@ public class Slf4jReporter extends AbstractCalltreeReporter {
 	}
 
 	public void setLoggerName(@Nonnull String aLoggerName) {
-		logger = LoggerFactory.getLogger(aLoggerName);
+		baseLoggerName = aLoggerName;
+		baseLogger = LoggerFactory.getLogger(aLoggerName);
+	}
+
+	/**
+	 * @param aThreadName
+	 * @return
+	 */
+	private String getLoggerName(String aThreadName) {
+		return baseLoggerName + "." + aThreadName.replaceAll("[^a-zA-Z0-9_-]+", "_");
 	}
 
 }
