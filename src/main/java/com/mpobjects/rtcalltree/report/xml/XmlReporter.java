@@ -128,7 +128,7 @@ public class XmlReporter extends AbstractCalltreeReporter {
 	}
 
 	protected XMLStreamWriter createStreamWriter(Writer aWriter) {
-		XMLOutputFactory factory = XMLOutputFactory.newFactory();
+		XMLOutputFactory factory = XMLOutputFactory.newInstance();
 		XMLStreamWriter writer;
 		try {
 			writer = factory.createXMLStreamWriter(aWriter);
